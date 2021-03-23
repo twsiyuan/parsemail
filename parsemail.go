@@ -354,15 +354,13 @@ func decodeContent(content io.Reader, encoding string) (io.Reader, error) {
 		}
 
 		return bytes.NewReader(b), nil
-	case "7bit":
-		dd, err := ioutil.ReadAll(content)
+	case "7bit", "":
+		b, err := ioutil.ReadAll(content)
 		if err != nil {
 			return nil, err
 		}
 
-		return bytes.NewReader(dd), nil
-	case "":
-		return content, nil
+		return bytes.NewReader(b), nil
 	default:
 		return nil, fmt.Errorf("unknown encoding: %s", encoding)
 	}
@@ -483,7 +481,7 @@ type Email struct {
 	ResentMessageID string
 
 	ContentType string
-	Content io.Reader
+	Content     io.Reader
 
 	HTMLBody string
 	TextBody string
